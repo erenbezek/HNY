@@ -1,0 +1,210 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>inci_tanesiii</title>
+<style>
+  body {
+    background: radial-gradient(circle at center, #0f172a 0%, #000 100%);
+    height: 100vh;
+    margin: 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    overflow: hidden;
+    perspective: 1200px;
+    font-family: 'Segoe UI', sans-serif;
+  }
+
+ 
+  .tree-wrapper {
+    position: relative;
+    width: 2px;
+    height: 400px;
+    transform-style: preserve-3d;
+    transform: translateY(-50px); 
+    animation: spinTree 15s infinite linear;
+  }
+
+  
+  .light {
+    position: absolute;
+    border-radius: 50%;
+    /* Parlama efekti */
+    box-shadow: 0 0 10px var(--color), 0 0 20px var(--color);
+    
+    top: var(--top); 
+    width: var(--size);
+    height: var(--size);
+    background: var(--color);
+    
+    transform: 
+      rotateY(var(--angle)) 
+      translateZ(var(--radius));
+  }
+
+  
+  .star {
+    position: absolute;
+    /* Yıldızı tam ağacın ucuna oturttum */
+    top: -60px; 
+    left: 50%;
+    transform: translateX(-50%);
+    
+    
+    color: #fff9c4; 
+    font-size: 55px;
+    text-shadow: 0 0 15px #ffffff, 0 0 30px #ffd700, 0 0 50px #ffae00;
+    
+    animation: pulseStar 2s infinite alternate;
+  }
+
+  
+  @keyframes spinTree {
+    0% { transform: translateY(-50px) rotateY(0deg); }
+    100% { transform: translateY(-50px) rotateY(360deg); }
+  }
+
+  @keyframes pulseStar {
+    0% { transform: translateX(-50%) scale(1); opacity: 0.9; }
+    100% { transform: translateX(-50%) scale(1.15); opacity: 1; filter: brightness(1.2); }
+  }
+
+  
+  .snowflake {
+    position: absolute;
+    background: white;
+    border-radius: 50%;
+    opacity: 0.7;
+    pointer-events: none;
+    top: -10px;
+    animation: fall linear infinite;
+  }
+  @keyframes fall {
+    to { transform: translateY(110vh); }
+  }
+
+  
+  #playBtn {
+    position: fixed;
+    bottom: 50px;
+    padding: 12px 35px;
+    border-radius: 50px;
+    background: rgba(255, 255, 255, 0.1);
+    border: 1px solid rgba(255, 255, 255, 0.4);
+    color: white;
+    cursor: pointer;
+    font-size: 15px;
+    backdrop-filter: blur(8px);
+    transition: 0.3s;
+    z-index: 2000;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    box-shadow: 0 0 15px rgba(0,0,0,0.5);
+  }
+  #playBtn:hover {
+    background: white;
+    color: #000;
+    box-shadow: 0 0 25px rgba(255,255,255,0.6);
+  }
+</style>
+</head>
+<body>
+
+  <div class="tree-wrapper" id="tree">
+    <div class="star">★</div>
+  </div>
+
+  <button id="playBtn" onclick="toggleMusic()">🎵 HNY!!!</button>
+
+  <audio id="audioPlayer" loop>
+    <source src="zil.mp3" type="audio/mpeg">
+    
+    <source src="https://upload.wikimedia.org/wikipedia/commons/e/e9/Jingle_Bells_%28Kevin_MacLeod%29_%28Source%29.oga" type="audio/ogg">
+  </audio>
+
+  <script>
+    const tree = document.getElementById('tree');
+    
+    // Ağaç Ayarları (Sevdiğin ayarlar)
+    const particleCount = 200; 
+    const treeHeight = 400;    
+    const maxRadius = 180;     
+    const loops = 7; 
+
+    const colors = ['#d32f2f', '#388e3c', '#fbc02d', '#ffffff']; 
+
+    for (let i = 0; i < particleCount; i++) {
+      const light = document.createElement('div');
+      light.classList.add('light');
+
+      const progress = i / particleCount;
+      
+      const topPos = progress * treeHeight;
+      const currentRadius = progress * maxRadius;
+      const currentAngle = (progress * loops * 360) + 'deg';
+
+      const color = colors[i % colors.length];
+      const size = Math.random() * 5 + 3 + 'px';
+
+      light.style.setProperty('--top', topPos + 'px');
+      light.style.setProperty('--radius', currentRadius + 'px');
+      light.style.setProperty('--angle', currentAngle);
+      light.style.setProperty('--color', color);
+      light.style.setProperty('--size', size);
+
+      tree.appendChild(light);
+    }
+
+    
+    function makeSnow() {
+      const snow = document.createElement('div');
+      snow.classList.add('snowflake');
+      snow.style.left = Math.random() * 100 + 'vw';
+      const size = Math.random() * 3 + 2 + 'px';
+      snow.style.width = size;
+      snow.style.height = size;
+      const speed = Math.random() * 4 + 4; 
+      snow.style.animationDuration = speed + 's';
+      document.body.appendChild(snow);
+      setTimeout(() => snow.remove(), speed * 1000);
+    }
+    setInterval(makeSnow, 100);
+
+    
+    const audio = document.getElementById('audioPlayer');
+    const btn = document.getElementById('playBtn');
+
+    
+    audio.onerror = function() {
+        console.log("Dosya bulunamadı veya format hatası. Yedek kaynağa geçiliyor.");
+    };
+
+    function toggleMusic() {
+      if (audio.paused) {
+        var playPromise = audio.play();
+        if (playPromise !== undefined) {
+            playPromise.then(_ => {
+                btn.innerText = "⏸ Durdur";
+                btn.style.background = "rgba(255,255,255,0.8)";
+                btn.style.color = "black";
+            })
+            .catch(error => {
+                console.log("Hata:", error);
+                alert("Müzik dosyası (zil.mp3) yok, Dosyanın adına ve klasörüne bak..");
+                btn.innerText = "⚠️ Dosya Yok";
+                btn.style.background = "red";
+            });
+        }
+      } else {
+        audio.pause();
+        btn.innerText = "🎵 	HNY!!!";
+        btn.style.background = "rgba(255,255,255,0.1)";
+        btn.style.color = "white";
+      }
+    }
+  </script>
+
+</body>
+</html>
