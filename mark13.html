@@ -31,7 +31,7 @@
   .light {
     position: absolute;
     border-radius: 50%;
-    /* Parlama efekti */
+    /* parlama efekti icin */
     box-shadow: 0 0 10px var(--color), 0 0 20px var(--color);
     
     top: var(--top); 
@@ -47,7 +47,7 @@
   
   .star {
     position: absolute;
-    /* Yıldızı tam ağacın ucuna oturttum */
+    /* yildizi agacin ucuna */
     top: -60px; 
     left: 50%;
     transform: translateX(-50%);
@@ -127,7 +127,7 @@
   <script>
     const tree = document.getElementById('tree');
     
-    // Ağaç Ayarları (Sevdiğin ayarlar)
+    // agac
     const particleCount = 200; 
     const treeHeight = 400;    
     const maxRadius = 180;     
@@ -178,7 +178,7 @@
 
     
     audio.onerror = function() {
-        console.log("Dosya bulunamadı veya format hatası. Yedek kaynağa geçiliyor.");
+        console.log("Dosya bulunamadi veya format hatasi. Yedek kaynaga geciliyor.");
     };
 
     function toggleMusic() {
@@ -192,7 +192,7 @@
             })
             .catch(error => {
                 console.log("Hata:", error);
-                alert("Müzik dosyası (zil.mp3) yok, Dosyanın adına ve klasörüne bak..");
+                alert("Muzik dosyasi (zil.mp3) yok, Dosyanin adina ve klasorune bak...");
                 btn.innerText = "⚠️ Dosya Yok";
                 btn.style.background = "red";
             });
