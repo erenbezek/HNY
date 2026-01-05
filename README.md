@@ -1,3 +1,3 @@
 # HNY
-### Happy New Yeaarrr 2026!!!!!!!!!!!!!
+### Happy New Yearr 2026!!
 ![ekrangoruntusu](ss.png)
